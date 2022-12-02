@@ -1,0 +1,45 @@
+python3 save_features.py --dataset DFSPD --method manifold_mixup --model WideResNet28_10 --split base
+
+python3 testforPKA.py --dataset  DFSPD --method manifold_mixup --model WideResNet28_10 --n_shot 1
+
+python3 train.py --dataset DFSPD --method manifold_mixup --model WideResNet28_10 --batch_size 8 --stop_epoch 200
+
+
+The order is as follows:
+(1) save model(random seed)
+$ python main.py --dataset-path "" --dataset miniimagenet --model resnet12 --epochs 0 --manifold-mixup 500 --rotations --cosine --gamma 0.9 --milestones 100 --skip-epochs 450 --batch-size 128 --preprocessing ME --save-model "/1.pt1" --n-shot 1
+
+$ python main.py --dataset-path "" --dataset miniimagenet --model resnet12 --epochs 0 --manifold-mixup 500 --rotations --cosine --gamma 0.9 --milestones 100 --skip-epochs 450 --batch-size 128 --preprocessing ME --save-model "/2.pt1" --n-shot 1
+
+$ python main.py --dataset-path "" --dataset miniimagenet --model resnet12 --epochs 0 --manifold-mixup 500 --rotations --cosine --gamma 0.9 --milestones 100 --skip-epochs 450 --batch-size 128 --preprocessing ME --save-model "/3.pt1" --n-shot 1
+(2) save features
+$ python main.py --dataset-path "" --dataset miniimagenet --model resnet12 --epochs 0 --load-model "/<1 or 2 or 3>.pt1/" --save-features "/features<1 or 2 or 3>.pt1" --n-shots 1
+$ python main.py --dataset-path "" --dataset miniimagenet --model resnet12 --epochs 0 --load-model "/<1 or 2 or 3>.pt1/" --save-features "/featuresAS<1 or 2 or 3>.pt1" --n-shots 1 --sample-aug 30
+(3) compute the accuracy
+$ python main.py --dataset-path "" --dataset miniimagenet --model resnet12 --preprocessing "ME" --test-features "features1.pt11" --n-shots 1
+$ python main.py --dataset-path "" --dataset miniimagenet --model resnet12 --preprocessing "ME" --test-features "featuresAS1.pt11" --n-shots 1
+$ python main.py --dataset-path "" --dataset miniimagenet --model resnet12 --preprocessing "ME" --test-features "["features1.pt11","features2.pt11","features3.pt11"]" --n-shots 1
+$ python main.py --dataset-path "" --dataset miniimagenet --model resnet12 --preprocessing "ME" --test-features "["featuresAS1.pt11","featuresAS2.pt11","featuresAS3.pt11"]" --n-shots 1
+
+
+python main.py --dataset-path "./datasets" --dataset miniimagenet --model resnet12 --preprocessing "ME" --test-features "[\"/home/iim/eee/code/Mycode/easy/features/minifeaturesAS1.pt11\",\"/home/iim/eee/code/Mycode/easy/features/minifeaturesAS2.pt11\",\"/home/iim/eee/code/Mycode/easy/features/minifeaturesAS3.pt11\"]" --n-shots 5
+
+python main.py --dataset-path "./datasets" --dataset miniimagenet --model resnet12 --preprocessing "ME" --test-features "[\"/home/iim/eee/code/Mycode/easy/features/features1.pt11\"]" --n-shot 1
+
+
+python main.py --dataset-path "./datasets" --dataset miniimagenet --model resnet12 --epochs 0 --load-model "./resnet12/mini1.pt1" --save-features "./features/featuresAS1.pt1" --n-shots 1 --sample-aug 30
+
+python main.py --dataset-path "./datasets" --dataset miniimagenet --model resnet12 --preprocessing "ME" --test-features "[\"./features/featuresAS10.pt11\",\"./features/featuresAS11.pt11\",\"./features/featuresAS12.pt11\",\"./features/featuresAS13.pt11\",\"./features/featuresAS14.pt11\"]" --n-shot 1
+s
+
+python main.py --dataset-path "./datasets" --dataset cubfs --model resnet12 --preprocessing "ME" --test-features "[\"./features2/cubfsfeaturesAS1.pt11\",\"./features2/cubfsfeaturesAS2.pt11\"]" --n-shot 1
+
+python main.py --dataset-path "./datasets" --dataset DFSPD --model resnet12 --epochs 0 --manifold-mixup 500 --rotations --cosine --gamma 0.9 --milestones 100 --skip-epochs 450 --batch-size 128 --preprocessing ME --save-model "./checkpoint/DFSPD1.pt1" --n-shot 1
+
+python main.py --dataset-path "./datasets" --dataset DFSPD --model resnet12 --epochs 0 --load-model "/home/iim/eee/code/Mycode/easy/checkpoint/DFSPD1.pt11" --save-features "./features/DFSPDfeaturesAS1.pt1" --n-shots 1
+
+python main.py --dataset-path "./datasets" --dataset DFSPD --model resnet12 --preprocessing "ME" --test-features "[\"/home/iim/eee/code/Mycode/easy/features/DFSPDfeaturesAS1.pt11\"]" --n-shot 1
+
+
+
+
